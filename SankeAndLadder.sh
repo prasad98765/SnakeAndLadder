@@ -2,66 +2,88 @@
 
 echo "Welcome : To Sanke and Ladder Smulator Game"
 
-#Constant
-
+#constant
 START_POSITION=0
-END_POSITION=100
+WINNING_POSITION=100
 
 #variable 
 
-position=0
 noPlay=0
 ladder=1
 snake=2
+player1=0
+player2=0
+flag=0
+position=0
 count=0
- 
-function checkWinOrNot()
-{
-
-   if [[ $position -eq $END_POSITION ]]
-   then
-      echo "Win"
-		echo "Total Die Roll Count" $count
-   else
-      nextMoves
-   fi
-
-}
-
-
 function nextMoves()
 {
 
-	playerRoll=$((RANDOM%6+1))
-	count=$(( $count + 1))
+	position=$1
+	playerRoll=$((RANDOM%6+1)) 
 	positionMoves=$((RANDOM%3))
 
 	case $positionMoves in
 		$noPlay)
-			echo "No Play"
-			nextMoves
+			echo $position
 			;;
-   	$ladder)
+		$ladder)
 			playerPosition=$(( $position + $playerRoll ))
-			if [[ $playerPosition -gt $END_POSITION ]]
+			if [[ $playerPosition -gt $WINNING_POSITION ]]
 			then
-				nextMoves
-			else
-				position=$(( $position + $playerRoll ))
 				echo $position
-				checkWinOrNot
-	   	fi;;
-		$snake)
-			position=$(( $position - $playerRoll ))
-			if [[ $position -lt $START_POSITION ]]
-			then
-				position=0
-				nextMoves
 			else
-				checkWinOrNot
+				echo $playerPosition
+			fi;;
+   	$snake)
+			playerPosition=$(( $position - $playerRoll ))
+			if [[ $playerPosition -lt $START_POSITION ]]
+			then
+				echo $position
+			else
+				echo $playerPosition
 			fi;;
 	esac
 
 }
 
-nextMoves
+function getWinner()
+{
+
+	while [[ $player1 -le $WINNING_POSITION && $player2 -le $WINNING_POSITION ]]
+	do
+		if [ $flag -eq 0 ]
+		then
+			player1=$(nextMoves $player1)
+         flag=1
+        	echo "Player1 Position: " $player1
+        	if [[ $player1 -eq $WINNING_POSITION ]]
+         then
+         	echo "Player1 win" $count
+            break;
+         fi
+		fi
+      if [ $flag -eq 1 ]
+      then
+      	flag=0
+        	player2=$(nextMoves $player2)
+         echo "Player2 position : "$player2
+         if [[ $player2 -eq $WINNING_POSITION ]]
+        	then
+         	echo "Player2 win !! " $count
+            break;
+         fi
+       fi
+       count=$(( $count + 1 ))
+	done
+
+}
+
+function main()
+{
+
+	getWinner
+
+}
+
+main
