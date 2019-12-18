@@ -1,5 +1,7 @@
 #!/bin/bash -x
 
+echo "Welcome : To Sanke and Ladder Smulator Game"
+
 #Constant
 
 START_POSITION=0
@@ -35,7 +37,6 @@ function nextMoves()
 	positionMoves=$((RANDOM%3))
 
 	case $positionMoves in
-
 		$noPlay)
 			echo "No Play"
 			nextMoves
@@ -50,7 +51,7 @@ function nextMoves()
 				echo $position
 				checkWinOrNot
 	   	fi;;
-   	$snake)
+		$snake)
 			position=$(( $position - $playerRoll ))
 			if [[ $position -lt $START_POSITION ]]
 			then
