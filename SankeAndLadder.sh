@@ -1,5 +1,10 @@
 #!/bin/bash -x
 
+#Constant
+
+START_POSITION=0
+END_POSITION=100
+
 #variable 
 
 position=0
@@ -11,7 +16,7 @@ count=0
 function checkWinOrNot()
 {
 
-   if [[ $position -eq 100 ]]
+   if [[ $position -eq $END_POSITION ]]
    then
       echo "Win"
 		echo "Total Die Roll Count" $count
@@ -24,6 +29,7 @@ function checkWinOrNot()
 
 function nextMoves()
 {
+
 	playerRoll=$((RANDOM%6+1))
 	count=$(( $count + 1))
 	positionMoves=$((RANDOM%3))
@@ -36,7 +42,7 @@ function nextMoves()
 			;;
    	$ladder)
 			playerPosition=$(( $position + $playerRoll ))
-			if [[ $playerPosition -gt 100 ]]
+			if [[ $playerPosition -gt $END_POSITION ]]
 			then
 				nextMoves
 			else
@@ -46,7 +52,7 @@ function nextMoves()
 	   	fi;;
    	$snake)
 			position=$(( $position - $playerRoll ))
-			if [[ $position -lt 0 ]]
+			if [[ $position -lt $START_POSITION ]]
 			then
 				position=0
 				nextMoves
@@ -54,6 +60,7 @@ function nextMoves()
 				checkWinOrNot
 			fi;;
 	esac
+
 }
 
 nextMoves
